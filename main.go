@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -23,7 +24,7 @@ type WeatherData struct {
 }
 
 func main() {
-	location := "LOCATION"
+	location := "Lancaster,UK"
 	apiKey := os.Getenv("OPENWEATHERMAP_API_KEY")
 	if apiKey == "" {
 		fmt.Println("OPENWEATHERMAP_API_KEY environment variable not set")
@@ -95,17 +96,18 @@ func main() {
        /
   `
 
-	if weatherData.Weather[0].Description == "Sun" {
+	if strings.Contains(weatherData.Weather[0].Description, "sun") {
 		fmt.Println(asciiSun)
-	} else if weatherData.Weather[0].Description == "Rain" {
+	} else if strings.Contains(weatherData.Weather[0].Description, "rain") {
 		fmt.Println(acsiiRainCloud)
-	} else if weatherData.Weather[0].Description == "Snow" {
+	} else if strings.Contains(weatherData.Weather[0].Description, "snow") {
 		fmt.Println(asciiSnow)
-	} else if weatherData.Weather[0].Description == "Thunder" {
+	} else if strings.Contains(weatherData.Weather[0].Description, "thunder") {
 		fmt.Println(asciiThunder)
 	} else {
 		fmt.Println(asciiCloud)
 	}
+
 	fmt.Printf("Location: %s\n", location)
 	fmt.Printf("Weather: %s\n", weatherData.Weather[0].Description)
 	fmt.Printf("Temperature: %.2f°C\n", tempCelsius)
