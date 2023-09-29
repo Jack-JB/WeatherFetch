@@ -23,7 +23,7 @@ type WeatherData struct {
 }
 
 func main() {
-	location := "London"
+	location := "Lancaster,UK"
 	apiKey := os.Getenv("OPENWEATHERMAP_API_KEY")
 	if apiKey == "" {
 		fmt.Println("OPENWEATHERMAP_API_KEY environment variable not set")
@@ -58,6 +58,11 @@ func main() {
 	sunriseTime := time.Unix(weatherData.Sys.Sunrise, 0).Format("15:04:05")
 	sunsetTime := time.Unix(weatherData.Sys.Sunset, 0).Format("15:04:05")
 
+	fmt.Println("       .--.      ")
+	fmt.Println("    .-(    ).    ")
+	fmt.Println("   (___.__)__)   ")
+	fmt.Println("                 ")
+	fmt.Printf("Location: %s\n", location)
 	fmt.Printf("Weather: %s\n", weatherData.Weather[0].Description)
 	fmt.Printf("Temperature: %.2f°C\n", tempCelsius)
 	fmt.Printf("Sunrise: %s\n", sunriseTime)
