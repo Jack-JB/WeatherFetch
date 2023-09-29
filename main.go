@@ -23,10 +23,14 @@ type WeatherData struct {
 }
 
 func main() {
-	location := "Lancaster,UK"
+	location := "LOCATION"
 	apiKey := os.Getenv("OPENWEATHERMAP_API_KEY")
 	if apiKey == "" {
 		fmt.Println("OPENWEATHERMAP_API_KEY environment variable not set")
+		os.Exit(1)
+	}
+	if location == "LOCATION" {
+		fmt.Println("LOCATION variable not set")
 		os.Exit(1)
 	}
 
@@ -58,10 +62,50 @@ func main() {
 	sunriseTime := time.Unix(weatherData.Sys.Sunrise, 0).Format("15:04:05")
 	sunsetTime := time.Unix(weatherData.Sys.Sunset, 0).Format("15:04:05")
 
-	fmt.Println("       .--.      ")
-	fmt.Println("    .-(    ).    ")
-	fmt.Println("   (___.__)__)   ")
-	fmt.Println("                 ")
+	asciiSun := `
+      \   /
+       .-.
+    ‒ (   ) ‒
+       .-.
+      /   \
+  `
+	asciiCloud := `
+        .--.
+     .-(    ).
+    (___.__)__)
+  `
+	acsiiRainCloud := `
+      .--.
+   .-(    ).
+  (___.__)__)
+   ʻ‚ʻ‚ʻ‚ʻ‚ʻ
+  `
+	asciiSnow := `
+      .--.
+   .-(    ).
+  (___.__)__)
+   * * * * *
+  `
+
+	asciiThunder := `
+     .--.
+  .-(    ).
+ (___.__)__)
+      /_
+       /
+  `
+
+	if weatherData.Weather[0].Description == "Sun" {
+		fmt.Println(asciiSun)
+	} else if weatherData.Weather[0].Description == "Rain" {
+		fmt.Println(acsiiRainCloud)
+	} else if weatherData.Weather[0].Description == "Snow" {
+		fmt.Println(asciiSnow)
+	} else if weatherData.Weather[0].Description == "Thunder" {
+		fmt.Println(asciiThunder)
+	} else {
+		fmt.Println(asciiCloud)
+	}
 	fmt.Printf("Location: %s\n", location)
 	fmt.Printf("Weather: %s\n", weatherData.Weather[0].Description)
 	fmt.Printf("Temperature: %.2f°C\n", tempCelsius)
