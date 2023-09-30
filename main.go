@@ -24,17 +24,57 @@ type WeatherData struct {
 	} `json:"sys"`
 }
 
+type Config struct {
+	DefaultLocation string `json:"default_location"`
+}
+
 func main() {
-	location := flag.String("location", "LOCATION", "Location to get weather information for")
+	location := flag.String("location", "", "Location to get weather information for")
+	setDefaultLocation := flag.String("set-default-location", "", "Set the defualt location in config.json")
 	flag.Parse()
-	apiKey := os.Getenv("OPENWEATHERMAP_API_KEY")
-	if apiKey == "" {
-		fmt.Println("ERROR: OPENWEATHERMAP_API_KEY environment variable not set")
+
+	configData, err := os.ReadFile("config.json")
+	if err != nil {
+		fmt.Println("Error: Could not read config.json", err)
 		os.Exit(1)
 	}
 
-	if *location == "LOCATION" {
-		fmt.Println("ERROR: Please provide a location")
+	var config Config
+	err = json.Unmarshal(configData, &config)
+	if err != nil {
+		fmt.Println("Error: Could not parse config.json", err)
+		os.Exit(1)
+	}
+
+	// Set the default location in the configuration file if the -set-default-location flag is specified
+	if *setDefaultLocation != "" {
+		config.DefaultLocation = *setDefaultLocation
+
+		// Marshal the Config struct into JSON data
+		configData, err := json.MarshalIndent(config, "", "  ")
+		if err != nil {
+			fmt.Println("Error marshaling configuration data:", err)
+			os.Exit(1)
+		}
+
+		// Write the JSON data to the configuration file
+		err = os.WriteFile("config.json", configData, 0644)
+		if err != nil {
+			fmt.Println("Error writing configuration file:", err)
+			os.Exit(1)
+		}
+
+		fmt.Printf("Default location set to %s\n", *setDefaultLocation)
+		os.Exit(0)
+	}
+
+	if *location == "" {
+		*location = config.DefaultLocation
+	}
+
+	apiKey := os.Getenv("OPENWEATHERMAP_API_KEY")
+	if apiKey == "" {
+		fmt.Println("ERROR: OPENWEATHERMAP_API_KEY environment variable not set")
 		os.Exit(1)
 	}
 
