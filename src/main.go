@@ -147,14 +147,15 @@ func main() {
            /
       `
 
-		if strings.Contains(weatherData.Weather[0].Description, "sun") {
-			fmt.Println(asciiSun)
-		} else if strings.Contains(weatherData.Weather[0].Description, "rain") {
-			fmt.Println(acsiiRainCloud)
-		} else if strings.Contains(weatherData.Weather[0].Description, "snow") {
-			fmt.Println(asciiSnow)
-		} else if strings.Contains(weatherData.Weather[0].Description, "thunder") {
-			fmt.Println(asciiThunder)
+		asciiArt := map[string]string{
+			"sun":     asciiSun,
+			"rain":    acsiiRainCloud,
+			"snow":    asciiSnow,
+			"thunder": asciiThunder,
+		}
+
+		if art, ok := asciiArt[strings.ToLower(weatherData.Weather[0].Description)]; ok {
+			fmt.Println(art)
 		} else {
 			fmt.Println(asciiCloud)
 		}
