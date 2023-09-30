@@ -1,3 +1,9 @@
+// Author: https://github.com/Jack-JB
+// Description: A simple command line tool to get the weather for a given location.
+// Copyright (c) 2023, Jack Burrows.
+// All rights reserved.
+// This source code is licensed under the MIT license found in the
+// LICENSE file in the root directory of this source tree.
 package main
 
 import (
