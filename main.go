@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io"
 	"net/http"
@@ -24,18 +25,20 @@ type WeatherData struct {
 }
 
 func main() {
-	location := "Lancaster,UK"
+	location := flag.String("location", "LOCATION", "Location to get weather information for")
+	flag.Parse()
 	apiKey := os.Getenv("OPENWEATHERMAP_API_KEY")
 	if apiKey == "" {
-		fmt.Println("OPENWEATHERMAP_API_KEY environment variable not set")
-		os.Exit(1)
-	}
-	if location == "LOCATION" {
-		fmt.Println("LOCATION variable not set")
+		fmt.Println("ERROR: OPENWEATHERMAP_API_KEY environment variable not set")
 		os.Exit(1)
 	}
 
-	url := fmt.Sprintf("https://api.openweathermap.org/data/2.5/weather?q=%s&appid=%s", location, apiKey)
+	if *location == "LOCATION" {
+		fmt.Println("ERROR: Please provide a location")
+		os.Exit(1)
+	}
+
+	url := fmt.Sprintf("https://api.openweathermap.org/data/2.5/weather?q=%s&appid=%s", *location, apiKey)
 
 	client := &http.Client{
 		Timeout: 10 * time.Second,
@@ -108,7 +111,7 @@ func main() {
 		fmt.Println(asciiCloud)
 	}
 
-	fmt.Printf("Location: %s\n", location)
+	fmt.Printf("Location: %s\n", *location)
 	fmt.Printf("Weather: %s\n", weatherData.Weather[0].Description)
 	fmt.Printf("Temperature: %.2f°C\n", tempCelsius)
 	fmt.Printf("Sunrise: %s\n", sunriseTime)
