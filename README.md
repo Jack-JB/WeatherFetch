@@ -33,5 +33,4 @@ To use this app, run the following command in the project directory:
 This will display the current weather in London by default. To get the weather for a different location, modify the location variable in main.go to the desired location.
 
 ## License
-
-TODO: add a license
+This project is licensed under the terms of the MIT license. See the [LICENSE](LICENSE) file for details.
